@@ -129,4 +129,30 @@ class publicacion {
             return Conectar::mensajes($e->getCode());
         }
     }
+
+    public function cosiguePublicacion($postId){
+        try {
+            $conexion = Conectar::Conexion();
+
+            if (gettype($conexion) == "string") {
+                return $conexion;
+            }
+
+            $sql = "SELECT * FROM publicaciones WHERE postId = :postId";
+            $respuesta = $conexion->prepare($sql);
+            $respuesta->execute(array(':postId' => $postId));
+            $respuesta = $respuesta->fetch(PDO::FETCH_ASSOC);
+
+            $conexion = null;
+
+            if ($respuesta) {
+                $publicacion = new publicacion($respuesta["postId"], $respuesta["titulo"], $respuesta["mensaje"], $respuesta["temaId"], $respuesta["userId"]);
+                return $publicacion;
+            } else {
+                return $publicacion = null;
+            }
+        } catch (PDOException $e) {
+            return Conectar::mensajes($e->getCode());
+        }
+    }
 }

@@ -46,6 +46,10 @@ class usuarioController{
         return usuario::consigueUsuario($nombre_usuario, $contrasenia);
     }
 
+    public function consigueNombre($idUsuario){
+        return usuario::consigueNombre($idUsuario);
+    }
+
     public function cerrarSesion(){
         $this->sesion->borrarSesion();
     }
@@ -57,5 +61,7 @@ $controlador = new usuarioController();
 if (isset($_GET["cerrarSesion"])) {
     $controlador->cerrarSesion();
 }
-require_once("formularioUsuario/loginUsuario.php");
-require_once("formularioUsuario/registrarUsuario.php");
+if (!isset($_GET["postId"])) {
+    require_once("formularioUsuario/loginUsuario.php");
+    require_once("formularioUsuario/registrarUsuario.php");
+}

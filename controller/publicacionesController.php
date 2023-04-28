@@ -12,10 +12,19 @@ class publicacionesController{
     public function listaPublicacionesTema($temaId){
         return $this->publicacion->cosigueListaTema($temaId);
     }
+
+    public function consiguePublicacion($postId){
+        return $this->publicacion->cosiguePublicacion($postId);
+    }
 }
 
 $controller = new publicacionesController();
 if(isset($_GET["id"])){
     $publicaciones = $controller->listaPublicacionesTema($_GET["id"]);
+} else {
+    if(isset($_GET["postId"])){
+        $publicacion = $controller->consiguePublicacion($_GET["postId"]);
+    }
 }
+
 

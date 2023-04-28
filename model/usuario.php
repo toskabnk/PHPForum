@@ -205,6 +205,32 @@ class usuario
         }
     }
 
+    public static function consigueNombre($idUsuario){
+        try {
+            $conexion = Conectar::Conexion();
+
+            if (gettype($conexion) == "string") {
+                return $conexion;
+            }
+
+            $sql = "SELECT nombre_usuario FROM usuarios WHERE userId = :usuario";
+            //$respuesta = $conexion->prepare("SELECT * FROM usuarios where nombre_usuario = '.$nombre_usuario' and contrasenia = '$contrasenia'");
+            $respuesta = $conexion->prepare($sql);
+            $respuesta->execute(array(':usuario' => $idUsuario));
+            $respuesta = $respuesta->fetch(PDO::FETCH_ASSOC);
+
+            $conexion = null;
+
+            if ($respuesta) {
+                return $respuesta;
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            return Conectar::mensajes($e->getCode());
+        }
+    }
+
     public static function cryptconmd5($password)
     {
         //Crea un salt

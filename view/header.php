@@ -13,7 +13,7 @@ session_start();
 
 <nav class="navbar navbar-light bg-light">
     <div class="container justify-content-center">
-        <a href="../index.php" class="btn btn-info m-1" type="button">Temas</a>
+        <a href="/PHP-MVC-Forum/index.php" class="btn btn-info m-1" type="button">Temas</a>
         <?php
         if(isset($_SESSION['usuario'])){
             ?>
@@ -24,8 +24,8 @@ session_start();
             <?php
         } else {
         ?>
-            <a href="/view/loginForm.php" class="btn btn-info m-1" type="button">Iniciar Sesion</a>
-            <a href="loginForm.php?registro" class="btn btn-info m-1" type="button">Registrarse</a>
+            <a href="/PHP-MVC-Forum/view/loginForm.php" class="btn btn-info m-1" type="button">Iniciar Sesion</a>
+            <a href="/PHP-MVC-Forum/view/loginForm.php?registro" class="btn btn-info m-1" type="button">Registrarse</a>
         <?php
         }
         if (isset($_POST["destroy"])) {

@@ -2,6 +2,12 @@
 include("header.php");
 ?>
 <div class="container-sm text-center justify-content-center w-25 mt-5">
+        <div class="row justify-content-center mb-1">
+            <h3>Listado de categorias
+        </div>
+
+</div>
+<div class="container-sm text-center justify-content-center w-25 mt-5">
     <?php foreach ($temas as $tem): ?>
         <div class="row justify-content-center mb-1">
             <div class="col">
