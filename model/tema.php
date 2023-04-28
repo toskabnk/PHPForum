@@ -1,4 +1,5 @@
 <?php
+require_once 'model/conexion/conexion.php';
 class tema {
     private int $temaId;
     private string $nombre;
@@ -54,6 +55,32 @@ class tema {
         $this->nombre = $nombre;
     }
 
+    function cosigueListaTema()
+    {
+        try {
+            $conexion = Conectar::Conexion();
+
+            if (gettype($conexion) == "string") {
+                return $conexion;
+            }
+
+            $sql = "SELECT * FROM temas";
+            $respuesta = $conexion->prepare($sql);
+            $respuesta->execute();
+            $respuesta = $respuesta->fetchAll(PDO::FETCH_ASSOC);
+
+            $conexion = null;
+
+            if ($respuesta) {
+                return $respuesta;
+            } else {
+                return $respuesta = null;
+            }
+
+        }catch (PDOException $e){
+            return Conectar::mensajes($e->getCode());
+        }
 
 
+    }
 }

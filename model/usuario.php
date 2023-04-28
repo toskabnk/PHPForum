@@ -1,6 +1,9 @@
 <?php
-require_once('conexion/conexion.php');
-class usuario {
+require_once '../model/conexion/conexion.php';
+require_once 'sesion.php';
+
+class usuario
+{
     private int $userId;
     private string $nombre_usuario;
     private string $contrasenia;
@@ -8,6 +11,7 @@ class usuario {
     private string $nombre;
     private string $apellidos;
     private string $email;
+    private Sesion $sesion;
 
     /**
      * @param int $userId
@@ -150,59 +154,62 @@ class usuario {
         $this->email = $email;
     }
 
-    public static function consigueUsuario($nombre_usuario, $contrasenia){
-        try{
+    public static function consigueUsuario($nombre_usuario, $contrasenia)
+    {
+        try {
             $contrasenia = self::cryptconmd5($contrasenia);
             $conexion = Conectar::Conexion();
 
-            if(gettype($conexion) == "string"){
+            if (gettype($conexion) == "string") {
                 return $conexion;
             }
 
-            $sql = "SELECT userId, nombre_usuario, contrasenia, rol, nombre, apellidos, email FROM USUARIOS WHERE nombre_usuario=:usuario AND contrasenia:=contrasenia";
+            $sql = "SELECT * FROM usuarios WHERE nombre_usuario = :usuario AND contrasenia = :contrasenia";
+            //$respuesta = $conexion->prepare("SELECT * FROM usuarios where nombre_usuario = '.$nombre_usuario' and contrasenia = '$contrasenia'");
             $respuesta = $conexion->prepare($sql);
-            $respuesta->execute(array(':nombre_usuario'=>$nombre_usuario, ':contrasenia'=>$contrasenia));
+            $respuesta->execute(array(':usuario' => $nombre_usuario, ':contrasenia' => $contrasenia));
             $respuesta = $respuesta->fetch(PDO::FETCH_ASSOC);
 
             $conexion = null;
 
-            if($respuesta){
-                $usuario = new usuario($respuesta["idUser"],$respuesta["nombre_usuario"],$respuesta["contrasenia"],$respuesta["rol"],$respuesta["nombre"],$respuesta["apellidos"],$respuesta["email"]);
-                $respuesta->closeCursor();
+            if ($respuesta) {
+                $usuario = new usuario($respuesta["userId"], $respuesta["nombre_usuario"], $respuesta["contrasenia"], $respuesta["rol"], $respuesta["nombre"], $respuesta["apellidos"], $respuesta["email"]);
+                Sesion::creaSesion("usuario", $usuario->getNombreUsuario());
                 return $usuario;
             } else {
-                $respuesta->closeCursor();
                 return $usuario = null;
             }
-        } catch (PDOException $e){
+        } catch (PDOException $e) {
             return Conectar::mensajes($e->getCode());
         }
     }
 
-    public static function registraUsuario($nombre_usuario, $contrasenia, $nombre, $apellidos, $email){
-        try{
+    public static function registraUsuario($nombre_usuario, $contrasenia, $nombre, $apellidos, $email)
+    {
+        try {
             $contrasenia = self::cryptconmd5($contrasenia);
             $conexion = Conectar::Conexion();
 
-            if(gettype($conexion) == "string"){
+            if (gettype($conexion) == "string") {
                 return $conexion;
             }
 
-            $sql = "INSERT INTO USUARIO(nombre_usuaio, contrasenia, rol, nombre, apellidos, email) VALUES (:nombre_usuaio, :contrasenia, :rol, :nombre, :apellidos, :email)";
+            $sql = "INSERT INTO usuarios(nombre_usuario, contrasenia, rol, nombre, apellidos, email) VALUES (:nombre_usuario, :contrasenia, :rol, :nombre, :apellidos, :email)";
             $respuesta = $conexion->prepare($sql);
-            $respuesta = $respuesta->execute(array(":nombre_usuaio"=>$nombre_usuario, ":contrasenia"=>$contrasenia, ":rol"=>"user", ":nombre"=>$nombre, ":apellidos"=>$apellidos, ":email"=>$email));
+            $respuesta = $respuesta->execute(array(":nombre_usuario" => $nombre_usuario, ":contrasenia" => $contrasenia, ":rol" => "user", ":nombre" => $nombre, ":apellidos" => $apellidos, ":email" => $email));
 
             $conexion = null;
             return $respuesta;
-        } catch (PDOException $e){
+        } catch (PDOException $e) {
             return Conectar::mensajes($e->getCode());
         }
     }
 
-    public static function cryptconmd5($password) {
+    public static function cryptconmd5($password)
+    {
         //Crea un salt
-        $salt = md5($password."%*4!#$;.k~’(_@");
-        $password = md5($salt.$password.$salt);
+        $salt = md5($password . "%*4!#$;.k~’(_@");
+        $password = md5($salt . $password . $salt);
         return $password;
     }
 
