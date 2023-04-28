@@ -7,11 +7,10 @@ if (!empty($_POST["login"])) {
     if (gettype($usuario) == "string") {
         $_SESSION["formdata"] = $_POST;
         $_SESSION["mensajeregistrar"] = $usuario;
-        header("Location:" . $_SERVER['PHP_SELF']);
+        header("Location:" . $_SERVER['PHP_SELF'] . "?errorLogin");
     } else {
         if ($usuario == null) {
             header("Location:" . $_SERVER['PHP_SELF'] . "?errorLogin");
-            echo $_SESSION["usuario"];
         } else {
             //require_once("email.php"); // requiere el archivo email.
             //$_SESSION["mensajeregistrar"] = Email::email_registrar($_SESSION["formdata"]); // llama a la función email y y almacena el mensaje que devuelve.

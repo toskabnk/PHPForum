@@ -10,6 +10,6 @@ class temaController{
 
     public function listaTodosTemas(){
         $temas = $this->tema->cosigueListaTema();
-        include 'view/listaTemas.php';
+        include 'view/listaCategorias.php';
     }
 }

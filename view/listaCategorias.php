@@ -8,7 +8,7 @@ include("header.php");
                 <?php echo $tem['nombre'] ?></td>
             </div>
             <div class="col">
-                <a href="" class="btn btn-info" type="button">Ver hilos</a>
+                <a href="view/listaPublicaciones.php?id=<?php echo $tem['temaId'] ?>" class="btn btn-info" type="button">Ver hilos</a>
             </div>
         </div>
     <?php endforeach; ?>
